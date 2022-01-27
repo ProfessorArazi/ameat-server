@@ -2,6 +2,7 @@ const express = require("express");
 const path = require("path");
 const cors = require("cors");
 require("./src/db/mongoose");
+require("dotenv").config();
 const contactRouter = require("./src/routers/contact");
 const orderRouter = require("./src/routers/order");
 const mealRouter = require("./src/routers/meal");
