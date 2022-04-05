@@ -1,7 +1,7 @@
 const nodemailer = require("nodemailer");
 
 const emailSender = (client, sub = "", details = {}) => {
-  const ameatEmail = "ameatrest@gmail.com";
+  const ameatEmail = process.env.EMAIL;
   let subject;
   let html;
   let str;
@@ -35,7 +35,7 @@ const emailSender = (client, sub = "", details = {}) => {
     service: "gmail",
     auth: {
       user: ameatEmail,
-      pass: "Amit1122",
+      pass: process.env.PASS,
     },
   });
 
