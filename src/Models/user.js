@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 const uniqueValidator = require("mongoose-unique-validator");
 const validator = require("validator");
-const zxcvbn = require("zxcvbn");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
@@ -43,7 +42,7 @@ const userSchema = new mongoose.Schema({
     minlength: 8,
     trim: true,
     validate(value) {
-      if (zxcvbn(value).score < 2) {
+      if (value.length < 8) {
         throw new Error("invalid password");
       }
     },
