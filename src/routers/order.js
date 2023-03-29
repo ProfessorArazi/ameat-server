@@ -28,35 +28,32 @@ router.post("/order/:id", async (req, res) => {
         user,
       });
     } catch (error) {
-      res.send({ error: error });
+      return res.send({ error: error });
     }
 
     const updatedPoints = Math.floor(
       userData.points - points + totalPrice / 10
     );
 
-    if (orderedItems.find((item) => item.name === "המבורגר יום הולדת")) {
-      await User.findByIdAndUpdate(
-        { _id: id },
-        { points: updatedPoints, redeemed: true },
-        function (err, result) {
-          if (err) {
-            return console.log(err);
-          }
-          res.send({ points: updatedPoints, redeemed: true });
-        }
-      );
-    } else {
-      await User.findByIdAndUpdate(
-        { _id: id },
-        { points: updatedPoints },
-        function (err, result) {
-          if (err) {
-            return console.log(err);
-          }
-          res.send({ points: updatedPoints });
-        }
-      );
+    try {
+      if (orderedItems.find((item) => item.name === "המבורגר יום הולדת")) {
+        await User.findByIdAndUpdate(id, {
+          points: updatedPoints,
+          redeemed: true,
+        })
+          .then((result) => res.send({ points: updatedPoints, redeemed: true }))
+          .catch((error) => console.log(error));
+        return;
+      } else {
+        await User.findByIdAndUpdate(id, { points: updatedPoints })
+          .then((result) => {
+            res.send({ points: updatedPoints });
+          })
+          .catch((error) => console.log(error));
+        return;
+      }
+    } catch (error) {
+      console.log(error);
     }
   }
   res.send({ error: "You dont have enough points" });
@@ -74,8 +71,8 @@ router.post("/order", async (req, res) => {
     });
     await order.save();
     await emailSender(user.email, "order", {
-      orderedItems,
       totalPrice: totalPrice + 10,
+      orderedItems,
       user,
     });
     res.status(200).send({
