@@ -8,7 +8,7 @@ router.post("/contact", async (req, res) => {
 
   try {
     await contact.save();
-    emailSender(req.body.email, "contact");
+    await emailSender(req.body.email, "contact");
     res.send({
       success: "success",
     });

@@ -1,6 +1,6 @@
 const nodemailer = require("nodemailer");
 
-const emailSender = (client, sub = "", details = {}) => {
+const emailSender = async (client, sub = "", details = {}) => {
   const ameatEmail = process.env.EMAIL;
   let subject;
   let html;
@@ -45,10 +45,12 @@ const emailSender = (client, sub = "", details = {}) => {
     subject,
     html,
   };
-  transporter.sendMail(mailOptions, function (error, info) {
-    if (error) {
-      console.log(error);
-    }
+  await new Promise((resolve, reject) => {
+    transporter.sendMail(mailOptions, function (error, info) {
+      if (error) {
+        reject(error);
+      } else resolve(info);
+    });
   });
 };
 

@@ -8,7 +8,7 @@ router.post("/users", async (req, res) => {
   const user = new User(req.body);
   try {
     await user.save();
-    emailSender(user.email);
+    await emailSender(user.email);
     const token = await user.generateAuthToken();
     res.status(201).send({
       user: {

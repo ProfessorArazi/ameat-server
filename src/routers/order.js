@@ -22,7 +22,7 @@ router.post("/order/:id", async (req, res) => {
 
     try {
       await order.save();
-      emailSender(user.email, "order", {
+      await emailSender(user.email, "order", {
         orderedItems,
         totalPrice: totalPrice + 10,
         user,
@@ -73,7 +73,7 @@ router.post("/order", async (req, res) => {
       totalPrice: totalPrice + 10,
     });
     await order.save();
-    emailSender(user.email, "order", {
+    await emailSender(user.email, "order", {
       orderedItems,
       totalPrice: totalPrice + 10,
       user,
